@@ -2,6 +2,7 @@
 --timeout=60 								# 时间开放
 --zone=									# 设置的域noaddthen默认
 --add --remove --query						        # 添加与取消与查询
+--reload								# 加载，生效
 
 ######################################################################################################################
 
@@ -13,19 +14,15 @@ firewall-cmd --get-active-zones   					# 查看全部的域
 
 firewall-cmd --set-default-zone=drop					# 设置默认区域
 
-firewall-cmd --zone=public --add-interface=ens38 --permanent  		# 根据域绑定网卡
+firewall-cmd  --add-interface=ens38 --permanent  		# 根据域绑定网卡
 
-firewall-cmd --zone=public --list-ports  				# 查看开放的端口
-
-firewall-cmd --zone=public --list-rich-rules 	        		# 查看添加的规则
-
-firewall-cmd --zone=public --add-protocol=icmp  --permanent		#开放协议 
+firewall-cmd  --add-protocol=   --permanent		#开放协议 
 
 firewall-cmd --add-service=ssh    --permanent				#开放服务
 
-firewall-cmd --zone=public --add-port=80/tcp --permanent    		# 开放单个端口
+firewall-cmd  --add-port=80/tcp --permanent    		# 开放单个端口
 
-firewall-cmd --zone=public --add-port=8388-8389/tcp --permanent    	# 开放端口范围
+firewall-cmd  --add-port=8388-8389/tcp --permanent    	# 开放端口范围
 
 #########################################################################################################################
 
@@ -36,7 +33,7 @@ firewall-cmd --permanent  --add-rich-rule='rule family="ipv4" source address="19
 firewall-cmd --permanent  --add-rich-rule='rule family="ipv4" source address="192.168.1.1"  accept'									# 根据ip接受所有端口
 
 firewall-cmd --add-masquerade --permanaent																#启用区域伪装		
-firewall-cmd --permanent  --add-forward-port=port=8080:proto=tcp:toaddr=172.16.0.2:toport=80										#端口转发
+firewall-cmd --permanent  --add-forward-port=port=8080:proto=tcp:toaddr=172.17.0.2:toport=80										#端口转发
 
 firewall-cmd --permanent  --add-rich-rule='rule family=ipv4 source address=192.168.1.0/24 masquerade'									#启用富规则区域伪装
 
