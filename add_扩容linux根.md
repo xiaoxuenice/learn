@@ -1,11 +1,12 @@
-linux根扩容
-
-1，添加硬盘,分区，改lvm类型
+##########################################################
+linux根扩容（ext4直接调整大小。xfs只能增加。详情看下面）
+#################################################################3
+1，添加硬盘
 fdisk /dev/sdb
 n 回车 回车 回车
 t   8e   w
 
-2，格式化
+2，格式化，根据类型（xfs，ext4）
 mkfs.xfs /dev/sdb1
 mkfs.ext4 /dev/sdb1
 lsblk
@@ -20,13 +21,35 @@ vgextend centos /dev/sdb1
 5，扩充根所在的逻辑卷
 lvextend -l +100%FREE /dev/centos/root
 
-6，格式化，根据类型（xfs，ext4）
-xfs_growfs /dev/centos/root
-resize2fs /dev/centos/root
+6，执行调整，根据类型（xfs，ext4）
+xfs_growfs /dev/mapper/centos-home
+resize2fs /dev/mapper/centos-home
 
 7，查看
 df -Th
-##########################################################
+###########################################################################################
+
+###########################################################################################
+xfs 减小分区空间，减小前必须要先卸载这个分区
+
+1，先卸载调整的分区
+fuser -m -k /home  (无法卸载，有进程占用使用)
+umount  /home
+2，重新格式化这个分区(没有数据)
+mkfs.xfs /dev/mapper/centos-home -f
+
+mkfs.ext4 /dev/mapper/centos-home   （或者格式化为ext4）
+cat /etc/fstab  （将home分区的开机挂载设置里的xfs改为ext4）
+
+3，减小lv的分区
+ lvreduce -L -100G /dev/mapper/centos-home
+
+4，执行调整，根据类型（xfs，ext4）
+xfs_growfs /dev/mapper/centos-home
+resize2fs /dev/mapper/centos-home
+
+4，挂载 mount /dev/mapper/centos-home /home/
+
 ##########################################################
    
   config显示和操作配置信息
