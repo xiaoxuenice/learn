@@ -19,10 +19,10 @@ if [[ $? > 0 ]];then
   exit 0
 fi
 ln -s /usr/local/python/bin/* /usr/local/bin/
-pip install --upgrade pip
-pip install ipython
+pip3 install --upgrade pip3
+pip3 install ipython
 if [[ $? > 0 ]];then
-  echo " no pip install ipython "
+  echo " no pip3 install ipython "
   exit 0
 fi
 ln -s /usr/local/python/bin/ipython* /usr/local/bin/
