@@ -1,5 +1,6 @@
-##########################################################
 linux根扩容（ext4直接调整大小。xfs只能增加。详情看下面）
+
+df -Th  lsblk partprobe
 #################################################################3
 1，添加硬盘
 fdisk /dev/sdb
@@ -35,21 +36,20 @@ xfs 减小分区空间，减小前必须要先卸载这个分区
 1，先卸载调整的分区
 fuser -m -k /home  (无法卸载，有进程占用使用)
 umount  /home
-2，重新格式化这个分区(没有数据)
-mkfs.xfs /dev/mapper/centos-home -f
 
-mkfs.ext4 /dev/mapper/centos-home   （或者格式化为ext4）
-cat /etc/fstab  （将home分区的开机挂载设置里的xfs改为ext4）
-
-3，减小lv的分区
+2，减小lv的分区
  lvreduce -L -100G /dev/mapper/centos-home
 
-4，执行调整，根据类型（xfs，ext4）
-xfs_growfs /dev/mapper/centos-home
-resize2fs /dev/mapper/centos-home
+3，重新格式化这个分区(没有数据)
+mkfs.xfs /dev/mapper/centos-home -f
 
+-------------------------------------------------------------------
+mkfs.ext4 /dev/mapper/centos-home   （或者格式化为ext4） |
+cat /etc/fstab  （将home分区的开机挂载设置里的xfs改为ext4）|
+-------------------------------------------------------------------
 4，挂载 mount /dev/mapper/centos-home /home/
 
+5, partprobe (重新识别，lsblk查看)
 ##########################################################
    
   config显示和操作配置信息
