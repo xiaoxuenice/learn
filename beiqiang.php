@@ -4,11 +4,18 @@
 
 ###     1    ##################################################
 [root@a html]# cat first/index.php 
+
 <?php
 $the_host = $_SERVER['HTTP_HOST'];
 Header("HTTP/1.1 303 Moved Permanently");
-Header("Location: http://djdj.com/?search=".$the_host);
+Header("refresh:1;url=http://djdj.com/?search=".$the_host);
 ?>
+<html>
+<title> 正在跳转官网</title>
+<body>
+</body>
+</html>
+
 
 ###     2    ##################################################
 [root@a html]# cat djdj/index.php 
