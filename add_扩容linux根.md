@@ -40,11 +40,11 @@ umount  /home
 2，减小lv的分区
  lvreduce -L -100G /dev/mapper/centos-home
 
-3，重新格式化这个分区(没有数据)
+3，重新格式化这个逻辑卷 (没有数据)
 mkfs.xfs /dev/mapper/centos-home -f
 
--------------------------------------------------------------------
-mkfs.ext4 /dev/mapper/centos-home   （或者格式化为ext4） |
+------------------------  格式化为 ext4 ---------------------------
+mkfs.ext4 /dev/mapper/centos-home   
 cat /etc/fstab  （将home分区的开机挂载设置里的xfs改为ext4）|
 -------------------------------------------------------------------
 4，挂载 mount /dev/mapper/centos-home /home/
