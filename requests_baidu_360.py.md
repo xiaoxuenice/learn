@@ -1,16 +1,12 @@
 from tkinter import *
-from fake_useragent import UserAgent
-ua = UserAgent()
 import time,re,requests,random
-LOG_LINE_NUM = 0
-
 class MY_GUI_SET():
 
     def __init__(self, init_window_name):
         self.init_window_name = init_window_name
 
     def set_init_window(self):
-        self.init_window_name.title("管理员身份运行")
+        self.init_window_name.title("baidu & 360 关键字查询软件 以管理员身份运行")
         self.init_window_name.geometry("740x500+10+10")
         self.init_window_name.attributes("-alpha", 1)  # 虚化 值越小虚化程度越高
         # 标签
@@ -54,7 +50,7 @@ class MY_GUI_SET():
         url = fea.split("\n")
         url = [i for i in url if i !='']
         uaList = ["Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko",
-                  "Mozilla/5.0 (X11; Linux x86_64…) Gecko/20100101 Firefox/60.0",
+                  "Mozilla/5.0 (X11; Linux x86_64) Gecko/20100101 Firefox/60.0",
                   'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36']
         send_headers = {"User-Agent": random.choice(uaList), "accept": "text/plain, */*; q=0.01",
                         "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,und;q=0.7", "Connection": "keep-alive"}
@@ -79,8 +75,11 @@ class MY_GUI_SET():
                     break
             cc=ci+"    "+z+"\n"
             self.log_Text.insert(END,cc)
-          except Exception as f:
-            self.result_data_Text.insert(END,f)
+          except Exception as f :
+              t=self.get_current_time()
+              t="\n"+str(t)+"\n"
+              self.result_data_Text.insert(END, t)
+              self.result_data_Text.insert(END,f)
 
     def R360(self):
 
@@ -116,9 +115,17 @@ class MY_GUI_SET():
                     break
             cc=ci+"    "+z+"\n"
             self.log_Text.insert(END,cc)
-          except EXCEPTION as f :
+          except Exception as f :
+              t=self.get_current_time()
+              t = "\n" + str(t) + "\n"
+              self.result_data_Text.insert(END, t)
               self.result_data_Text.insert(END,f)
+
+    def get_current_time(self):
+        current_time = time.strftime('%H:%M:%S', time.localtime(time.time()))
+        return current_time
 if __name__=="__main__":
     init_window = Tk()
     MY_GUI_SET(init_window).set_init_window()
     init_window.mainloop()
+
