@@ -6,6 +6,7 @@ groupadd www
 useradd -g www www -s /sbin/nologin
 cd nginx-1.14.0/
  ./configure --prefix=/usr/local/nginx --with-http_dav_module --with-http_stub_status_module --with-http_addition_module --with-http_sub_module --with-http_flv_module --with-http_mp4_module --with-pcre --with-http_ssl_module --with-http_gzip_static_module --user=www --group=www
+#--with-openssl=/openssl-1.0.2l --add-module=/ngx_cache_purge-2.3
 make && make install
 ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/
 cat >> /etc/init.d/nginx << EOF
