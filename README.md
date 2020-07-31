@@ -1,1 +1,1 @@
-learning record  
+I love learn~
