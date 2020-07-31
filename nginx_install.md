@@ -1,6 +1,7 @@
 cd /usr/src
 yum -y install gcc gcc-c++ make libtool zlib zlib-devel pcre pcre-devel openssl openssl-devel
 wget http://nginx.org/download/nginx-1.14.0.tar.gz
+if [ ! $? -eq 0 ];then exit 22;fi
 tar zxf nginx-1.14.0.tar.gz 
 groupadd www
 useradd -g www www -s /sbin/nologin
