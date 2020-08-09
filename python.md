@@ -115,47 +115,27 @@ a =tkinter.filedialog.askopenfilenames()#可以返回多个文件名
 print(a)
 a =tkinter.filedialog.askopenfiles()#多个文件流对象
 print(a)
-#####################################-----------------        mysql数据库操作连接               ---------######################
-def insert(ip,time,arg):
-  mydb = mysql.connector.connect(
-    host="192.168.116.200",
-    user="root",
-    passwd="Pwd@123456",
-    database="python"
-  )
-  a = mydb.cursor()
-  try:
-    a.execute("insert into shell(ip,time,message) values(%s,%s,%s);",(ip,time,arg))
-    mydb.commit()
-    return "ok"
-  except Exception as f:
-    return f
-def select():
-  mydb = mysql.connector.connect(
-    host="192.168.116.200",
-    user="root",
-    passwd="Pwd@123456",
-    database="python"
-  )
-  a = mydb.cursor()
-  a.execute("select concat(ip,time, message)  from shell  ;")
-  return (a.fetchall())
-#############################################################################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#################################################-----------------        mysql数据库操作连接          ---------###########
+create table IF NOT EXISTS ab(id int(50) primary key,name varchar(20),message varchar(100)) DEFAULT CHARSET=utf8;
+mysql_ssl_rsa_setup --uid=mysql
+vim /etc/my.cnf
+ssl-ca=/var/lib/mysql/ca.pem
+ssl-cert=/var/lib/mysql/server-cert.pem
+ssl-key=/var/lib/mysql/server-key.pem
+require_secure_transport = ON
+bind-address = 0.0.0.0
+systemctl  restart mysqld
+ALTER USER 'root'@'%' require ssl;                                        #修改用户只允许ssl连接 
+grant all privileges on *.* to 'root'@"%" identified by 'Pwd@123456' require ssl;    #授权时候只允许ssl
+FLUSH PRIVILEGES;
+show variables like '%ssl%';   #查看是否开启ssl连接
+\s                              #看是否是ssl连接
+alter user 'root'@'%' require x509;         #证书(pymysql不能用)
+mysql -uroot -pPwd@123456 -h 192.168.116.200 --ssl-cert=/var/lib/mysql/client-cert.pem --ssl-key=/var/lib/mysql/client-key.pem --ssl-ca=/var/lib/mysql/ca.pem
+------------------------------------------------------ssl+pymysql--------------------------------------------------
+db = pymysql.connect(host="192.168.116.200",user="root",passwd="Pwd@123456",database="python",ssl={"ssl":''}})
+a= db.cursor()
+a.execute('insert into  user(ip,time) values("123","80:02"')) #创建写入数据
+db.commit()
+a.execute('select time  from {} where ip="{}";'.format(abrr,who))           #查询读取数据
+print(a.fetchall())
