@@ -1,15 +1,32 @@
-------------------------------------------------------------------安装 docker----------------------------------------------------------
+-------------图形-----------
+yum groupinstall "X Window System"
+yum groupinstall "GNOME Desktop"
+systemctl set-default graphical.target 
+systemctl set-default multi-user.target
+startx
+------------mysql 8.0 ------------------------------------------------------------------------
+docker run -dit --name mysql8.0  -p3306:3306 -e MYSQL_ROOT_PASSWORD=Pwd@123456 library/mysql
+mysql_ssl_rsa_setup 
+create user 'zhangsan'@'%' identified by 'Pwd@123456' require ssl;
+alter user root require ssl;
+grant all privileges on *.* to 'root'@'%' with grant option ;
+flush privileges;
+create table IF NOT EXISTS ab(id int(50) primary key,name varchar(20),message varchatr(100)) DEFAULT CHARSET=utf8;
+insert into ab(id,name,message) values(52423423,'fsadfasd','fsasadf');
+select concat(id,'   ',name,"  \n ",message)  from ab where id=1;
+
+-------安装 docker----------------------------------------------------------
 wget https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm
 yum localinstall docker-ce-18.03.1.ce-1.el7.centos.x86_64.rpm -y 
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo 
 
--------------------------------------------------------------------安装 jenkins---------------------------------------------------------
+-------安装 jenkins---------------------------------------------------------
  wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
 nohup java -jar jenkins.war --httpPort=8080 &
 docker run -dit -p 80:8080 -p 50000:50000 --name jenkins -v /opt/jenkins:/var/jenkins_home --privileged=true  --restart always jenkins/jenkins
 
----------------------------------------------------------------------安装 gitlab------------------------------------------------------------
-yum安装办法=======================
+-------安装 gitlab------------------------------------------------------------
+yum安装办法===================================================================
 [gitlab-ce]
 name=gitlab-ce
 baseurl=http://mirrors.tuna.tsinghua.edu.cn/gitlab-ce/yum/el7
@@ -18,14 +35,14 @@ gpgcheck=0
 enabled=1
 gpgkey=https://packages.gitlab.com/gpg.key
 
-------------------------------------------------------------------------gitlab使用docker安装办法================================================================
+docker安装办法================================================================
 docker run -dit -p 2222:22 --restart=always -p 8080:8080 -p80:80 -p 8443:443 -v /home/gitlab/config:/etc/gitlab -v /home/gitlab/logs:/var/log/gitlab -v /home/gitlab/data:/var/opt/gitlab --restart always --name gitlab gitlab/gitlab-ce
 
 vim /etc/gitlab/gitlab.rb --> external_url 'http://192.168.1.12'
 git clone ssh://git@192.168.1.15:2222/python/python-project.git
 上一行加ssh表示容器映射的端口是2222，非22要加ssh
 
-------------------------------------------------------------------------docker学习记录------------------------------------------------
+-------docker------------------------------------------------
 echo  	net.ipv4.ip_forward=1 > /usr/lib/sysctl.d/00-system.conf && systemctl restart network && systemctl restart docker 
 #容器提交成为镜像的时候记住 -v 挂载的目录不会带走
 #容器导出时候，再导入为镜像时候启动要加bash，且启动要进入启动nginx
@@ -39,7 +56,7 @@ cat nginx.tar | docker import - nginx:latest		容器快照/模板导入为镜像
 find / -name [container id]  vim hostconfig.json  vim config.v2.json		修改/添加容器端口
 docker run --privileged -dti --name test1  centos /usr/sbin/init			ssh
 
--------------------------------------------------docker network -----------------------------------------
+--------docker network -----------------------------------------
 docker network create --driver  bridge networ-xue			bridge网络==默认桥接网络
 docker run -dit --name test1 --network networ-xue  -p802:80 nginx	bridge网络创建容器
 
@@ -91,3 +108,17 @@ docker build -t nginx:1.2 .
 docker run --privileged -dit -p222:22 -p880:80 nginx:1.2 init
 
 --------------------------------------------------------------------------------------------
+Janurary 一月					
+February 二月
+March 三月          
+April 四月
+May 五月
+June 六月
+July 七月
+August 八月
+September 九月
+October 十月
+November 十一月
+December 十二月
+统计每个ip访问量有多少     awk '{print $1}' access.log |sort -n |uniq -c |sort -n
+
