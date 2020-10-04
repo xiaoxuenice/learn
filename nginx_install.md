@@ -1,8 +1,15 @@
+#!/bin/bash
 cd /usr/src
 yum -y install gcc gcc-c++ make libtool zlib zlib-devel pcre pcre-devel openssl openssl-devel
 wget http://nginx.org/download/nginx-1.14.0.tar.gz
+if [ ! $? -eq 0 ];then exit 11;fi
+https://raw.githubusercontent.com/xiaoxuenice/learn/master/openssl-1.0.2l.tar.gz
 if [ ! $? -eq 0 ];then exit 22;fi
+https://raw.githubusercontent.com/xiaoxuenice/learn/master/ngx_cache_purge-2.3.tar.gz
+if [ ! $? -eq 0 ];then exit 33;fi
 tar zxf nginx-1.14.0.tar.gz 
+tar zxf ngx_cache_purge-2.3.tar.gz
+tar zxf openssl-1.0.2l.tar.gz
 groupadd www
 useradd -g www www -s /sbin/nologin
 cd nginx-1.14.0/
