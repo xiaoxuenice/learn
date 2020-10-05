@@ -1,4 +1,4 @@
-#########################################-----------------         随机验证码           ---------##############################
+#############-----------------         随机验证码           ---------##############################
 import random
 def get_code(xx):
    a='1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
@@ -7,27 +7,8 @@ def get_code(xx):
         c=random.randint(0,61)
         b+=a[c]
    return b   
-   
-#########################################-----------------         ssh                  ---------##############################
 
-import paramiko
-ssh=paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())    #允许不在/root/.ssh/known_hosts连接
-ssh.connect(hostname="192.168.116.200",port=22,username='root',password='xiaoxue')
-stdin,stdout,stderr=ssh.exec_command("ls /")
-	
-a,b=stdout.read(),stderr.read() 		 #获取执行结果   
-result= a if a else b       
-result.decode()        
-
-try:
-    ssh.get_transport().is_active()		#判断是否连接
-    print("连接正常")
-except Exception as f:
-    print("断开连接")
-ssh.close() 	
-
-#######################################-----------------         ssh 密钥认证           ---------##############################
+##########################-----------------         ssh 密钥认证           ---------################
 #公钥打包exe程序需要添加 --key id_rsa参数  pyinstaller -F -w --key id_rsa .py
 import paramiko
 transport = paramiko.Transport(("192.168.116.200",22))
@@ -36,9 +17,27 @@ transport.connect(username='root',pkey=private_key)
 ssh=paramiko.SSHClient()
 ssh._transport=transport
 stdin,stdout,stderr=ssh.exec_command("ls /")
-
-
-######################################---------------         scp上传下载               ---------##############################
+a,b=stdout.read(),stderr.read() 		 #获取执行结果   
+result= a if a else b       
+result.decode()        
+try:
+    ssh.get_transport().is_active()		#判断是否连接
+    print("连接正常")
+except Exception as f:
+    print("断开连接")
+ssh.close() 	
+##########################---------------         遍历目录查找文件    ---------#############
+def search(dir,fil):
+    os.chdir(dir)
+    it = os.listdir()
+    for i in it:
+        pa = os.path.join(dir,i)
+        if os.path.isdir(pa):
+            search(pa,fil)
+            os.chdir(os.pardir)
+        elif fil in pa.split("/")[-1] :
+            print(pa)
+###############################---------------         scp上传下载               ---------##############################
 from scp import SCPClient
 import paramiko
 ssh=paramiko.SSHClient()
@@ -48,14 +47,9 @@ ssh.connect(hostname="192.168.116.200",port=22,username='root',pkey=private_key)
 scp=SCPClient(ssh.get_transport(),socket_timeout=15.0)
 scp.put('a.tar.gz',"/xue/")						#scp上传
 scp.get("/xue/b.tar.gz","./")					#scp下载
-
-
-######################################---------------         time获取时间              ---------##############################
-
+#######################---------------         time获取时间              ---------##############################
 time.strftime("%Y_%m_%d_%H:%M:%S",time.localtime(time.time()))
-
-#####################################-----------------        json编码解码              ---------##############################
-
+######################-----------------        json编码解码              ---------##############################
 import json
 js={"name":"张三","age"=26}            
 json.dumps(js)          #json编码
@@ -68,7 +62,7 @@ with open('a.js','r') as f:              #读取文件
      js=json.load(f)                     #json解码
 
 
-#####################################-----------------        弹出提示对话框,判断有文件    ---------###########################
+#####################-----------------        弹出提示对话框,判断有文件    ---------###########################
 --  1   （推荐）----------------------------------------------------------------------------------------------
 import easygui
 easygui.msgbox("what are you doing now\n\n",'提示')
@@ -115,7 +109,7 @@ a =tkinter.filedialog.askopenfilenames()#可以返回多个文件名
 print(a)
 a =tkinter.filedialog.askopenfiles()#多个文件流对象
 print(a)
-#################################################-----------------        mysql数据库操作连接          ---------###########
+#################################-----------------        mysql数据库操作连接          ---------###########
 create table IF NOT EXISTS ab(id int(50) primary key,name varchar(20),message varchar(100)) DEFAULT CHARSET=utf8;
 mysql_ssl_rsa_setup --uid=mysql
 vim /etc/my.cnf
@@ -132,10 +126,37 @@ show variables like '%ssl%';   #查看是否开启ssl连接
 \s                              #看是否是ssl连接
 alter user 'root'@'%' require x509;         #证书(pymysql不能用)
 mysql -uroot -pPwd@123456 -h 192.168.116.200 --ssl-cert=/var/lib/mysql/client-cert.pem --ssl-key=/var/lib/mysql/client-key.pem --ssl-ca=/var/lib/mysql/ca.pem
-------------------------------------------------------ssl+pymysql--------------------------------------------------
+###############-----------------                ssl+pymysql                 -------------------------
 db = pymysql.connect(host="192.168.116.200",user="root",passwd="Pwd@123456",database="python",ssl={"ssl":''}})
 a= db.cursor()
 a.execute('insert into  user(ip,time) values("123","80:02"')) #创建写入数据
 db.commit()
 a.execute('select time  from {} where ip="{}";'.format(abrr,who))           #查询读取数据
 print(a.fetchall())
+
+#################################-----------------        检索文件远程发送         ---------###########
+
+import os,easygui,paramiko
+from scp import SCPClient
+def SCP(Ip,file):          #上传文件
+    os.chdir("C:\\Users\\Administrator\\xiaoxue")
+    ssh=paramiko.SSHClient()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    private_key=paramiko.RSAKey.from_private_key_file("id_rsa")
+    ssh.connect(hostname="192.168.116.200",port=22,username='root',pkey=private_key)
+    scp=SCPClient(ssh.get_transport(),socket_timeout=15.0)
+    scp.put(file, "/mnt/")
+    ssh.close()
+def search(dir,fil):
+    os.chdir(dir)
+    it = os.listdir()
+    aww=[ ]
+    for i in it:
+        pa = os.path.join(dir,i)
+        if os.path.isdir(pa):
+            search(pa,fil)
+            os.chdir(os.pardir)
+        elif fil in pa.split("/")[-1] :
+            b=repr(pa)
+            SCP("192.168.116.200",pa)
+search("C:\\Users\\Administrator\\Desktop","xlsx")
