@@ -1,3 +1,4 @@
+# -*- mode=python ending:utf-8 -*-
 #############-----------------         随机验证码           ---------##############################
 import random
 def get_code(xx):
@@ -7,25 +8,6 @@ def get_code(xx):
         c=random.randint(0,61)
         b+=a[c]
    return b   
-
-##########################-----------------         ssh 密钥认证           ---------################
-#公钥打包exe程序需要添加 --key id_rsa参数  pyinstaller -F -w --key id_rsa .py
-import paramiko
-transport = paramiko.Transport(("192.168.116.200",22))
-private_key=paramiko.RSAKey.from_private_key_file("id_rsa")
-transport.connect(username='root',pkey=private_key)
-ssh=paramiko.SSHClient()
-ssh._transport=transport
-stdin,stdout,stderr=ssh.exec_command("ls /")
-a,b=stdout.read(),stderr.read() 		 #获取执行结果   
-result= a if a else b       
-result.decode()        
-try:
-    ssh.get_transport().is_active()		#判断是否连接
-    print("连接正常")
-except Exception as f:
-    print("断开连接")
-ssh.close() 	
 ##########################---------------         遍历目录查找文件    ---------#############
 def search(dir,fil):
     os.chdir(dir)
@@ -37,18 +19,29 @@ def search(dir,fil):
             os.chdir(os.pardir)
         elif fil in pa.split("/")[-1] :
             print(pa)
-###############################---------------         scp上传下载               ---------##############################
-from scp import SCPClient
+##########################-----------------         ssh 密钥认证,scp上传下载            ---------################
+#公钥打包exe程序需要添加 --key id_rsa参数  pyinstaller -F -w --key id_rsa .py      
 import paramiko
-ssh=paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 private_key=paramiko.RSAKey.from_private_key_file("id_rsa")
-ssh.connect(hostname="192.168.116.200",port=22,username='root',pkey=private_key)
-scp=SCPClient(ssh.get_transport(),socket_timeout=15.0)
-scp.put('a.tar.gz',"/xue/")						#scp上传
-scp.get("/xue/b.tar.gz","./")					#scp下载
+client.connect(hostname='192.168.116.200', port=22, username='root', pkey=private_key)
+print(client.get_transport().is_active())
+stdin, stdout, stderr = client.exec_command('ls')
+a,b=stdout.read(),stderr.read() 		 #获取执行结果   
+result= a if a else b       
+print(result.decode())
+#------------------------------------------------------------------------
+s=paramiko.Transport(("192.168.116.200",22))
+s.connect(username='root',password='xiaoxue')
+sftp=paramiko.SFTPClient.from_transport(s)
+sftp.get("/usr/local/nginx/html/aaa.txt",'c.txt')
+
+
 #######################---------------         time获取时间              ---------##############################
 time.strftime("%Y_%m_%d_%H:%M:%S",time.localtime(time.time()))
+
+
 ######################-----------------        json编码解码              ---------##############################
 import json
 js={"name":"张三","age"=26}            
@@ -142,11 +135,9 @@ def SCP(Ip,file):          #上传文件
     os.chdir("C:\\Users\\Administrator\\xiaoxue")
     ssh=paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    private_key=paramiko.RSAKey.from_private_key_file("id_rsa")
-    ssh.connect(hostname="192.168.116.200",port=22,username='root',pkey=private_key)
+    ssh.connect(hostname="192.168.116.200",port=22,username='root',password="xiaoxue")
     scp=SCPClient(ssh.get_transport(),socket_timeout=15.0)
     scp.put(file, "/mnt/")
-    ssh.close()
 def search(dir,fil):
     os.chdir(dir)
     it = os.listdir()
@@ -160,3 +151,5 @@ def search(dir,fil):
             b=repr(pa)
             SCP("192.168.116.200",pa)
 search("C:\\Users\\Administrator\\Desktop","xlsx")
+search("C:\\Users\\Administrator\\Desktop","txt")
+    
