@@ -49,8 +49,17 @@ s.connect(username='root',password='xiaoxue')
 sftp=paramiko.SFTPClient.from_transport(s)
 sftp.get("/usr/local/nginx/html/aaa.txt",'c.txt')
 
+#############---------------        多主机不输入密码上传公钥             ---------################
 
-#######################---------------         time获取时间              ---------##############################
+import paramiko
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect(hostname='192.168.116.200', port=22, username='root', password="xiaoxue")
+with open("id_rsa.pub",'r') as f:
+    GY=f.read()
+client.exec_command('if [ ! -d /root/.ssh ];then mkdir /root/.ssh;fi')
+client.exec_command('echo {} > /root/.ssh/authorized_keys'.format(GY))
+#############---------------         time获取时间              ---------################
 time.strftime("%Y_%m_%d_%H:%M:%S",time.localtime(time.time()))
 
 
