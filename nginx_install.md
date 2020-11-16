@@ -1,4 +1,5 @@
 #!/bin/bash
+#php 需要修改 listen 监听地址 www.conf
 cd /usr/src
 yum -y install gcc gcc-c++ make libtool zlib zlib-devel pcre pcre-devel openssl openssl-devel
 wget http://nginx.org/download/nginx-1.14.0.tar.gz
