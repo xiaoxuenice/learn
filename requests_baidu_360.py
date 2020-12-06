@@ -1,5 +1,5 @@
 from tkinter import *
-import time,re,requests,random
+import time,re,requests,random,threading
 class MY_GUI_SET():
 
     def __init__(self, init_window_name):
@@ -20,6 +20,7 @@ class MY_GUI_SET():
         self.log_label.grid(row=12, column=0)
         self.log_label = Label(self.init_window_name, text="信息输出")
         self.log_label.grid(row=24, column=0)
+
     # 文本框
         self.scroll = Scrollbar()
         self.log_Text = Text(self.init_window_name, width=102, height=14)  # jilu
@@ -27,23 +28,30 @@ class MY_GUI_SET():
         self.log_Text.config(yscrollcommand=self.scroll.set)
         self.log_Text.grid(row=26, column=0, columnspan=30)
         self.scroll.grid(column=90,row=26, sticky='NS')
+        self.log_Text.tag_config("tag1", foreground="green", font=2)
+        self.log_Text.tag_config("tag2", foreground="red", font=2)
 
 
         self.init_data_Text = Text(self.init_window_name, width=45, height=9)  # 原始数据录入框
         self.init_data_Text.grid(row=1, column=0, rowspan=10, columnspan=10)
         self.log_data_Text = Text(self.init_window_name, width=45, height=9)  # 日志框
         self.log_data_Text.grid(row=13, column=0, columnspan=10)
+
         self.name_data_Text = Text(self.init_window_name, width=45, height=9)  # 处name果展示
         self.name_data_Text.grid(row=1, column=12, rowspan=10, columnspan=10)
         self.result_data_Text = Text(self.init_window_name, width=45, height=9)  # 处理结果展示
         self.result_data_Text.grid(row=13, column=12, columnspan=10)
 
         # 按钮
-        self.str_trans_to_md5_button = Button(self.init_window_name, text="baidu", bg="lightblue", width=10,command=self.Rbaidu)  # 调用内部方法  加()为直接调用
+        self.str_trans_to_md5_button = Button(self.init_window_name, text="baidu", bg="lightblue", width=10,command=lambda: self.thread_it(self.Rbaidu))  # 调用内部方法  加()为直接调用
         self.str_trans_to_md5_button.grid(row=1, column=11)
-        self.str_trans_to_md5_butt = Button(self.init_window_name, text="360", bg="lightblue", width=10,command=self.R360)  # 调用内部方法  加()为直接调用
+        self.str_trans_to_md5_butt = Button(self.init_window_name, text="360", bg="lightblue", width=10,command=self.thread_it(self.R360))  # 调用内部方法  加()为直接调用
         self.str_trans_to_md5_butt.grid(row=5, column=11)
-
+    @staticmethod
+    def thread_it(func):
+        t = threading.Thread(target=func)
+        t.setDaemon(True)  # 守护--就算主界面关闭，线程也会留守后台运行（不对!）
+        t.start()
     def Rbaidu(self):
         error = "百度安全验证"  # baidu
         fea = self.init_data_Text.get(1.0, END).strip()
@@ -72,9 +80,13 @@ class MY_GUI_SET():
             for i in url:
                 if i in strlb:
                     z = "在"
+                    cc = ci + "    " + z + "\n"
+                    self.log_Text.insert(END, cc, "tag1")
                     break
-            cc=ci+"    "+z+"\n"
-            self.log_Text.insert(END,cc)
+                else:
+                    cc = ci + "    " + z + "\n"
+                    self.log_Text.insert(END, cc, "tag2")
+                    break
           except Exception as f :
               t=self.get_current_time()
               t="\n"+str(t)+"\n"
@@ -112,9 +124,15 @@ class MY_GUI_SET():
             for i in url:
                 if i in strlb:
                     z = "在"
+                    cc=ci+"    "+z+"\n"
+                    self.log_Text.insert(END,cc,"tag1")
                     break
-            cc=ci+"    "+z+"\n"
-            self.log_Text.insert(END,cc)
+                else:
+                    cc = ci + "    " + z + "\n"
+                    self.log_Text.insert(END, cc, "tag2")
+                    break
+
+
           except Exception as f :
               t=self.get_current_time()
               t = "\n" + str(t) + "\n"
@@ -128,4 +146,3 @@ if __name__=="__main__":
     init_window = Tk()
     MY_GUI_SET(init_window).set_init_window()
     init_window.mainloop()
-
