@@ -45,7 +45,7 @@ class MY_GUI_SET():
         # 按钮
         self.str_trans_to_md5_button = Button(self.init_window_name, text="baidu", bg="lightblue", width=10,command=lambda: self.thread_it(self.Rbaidu))  # 调用内部方法  加()为直接调用
         self.str_trans_to_md5_button.grid(row=1, column=11)
-        self.str_trans_to_md5_butt = Button(self.init_window_name, text="360", bg="lightblue", width=10,command=self.thread_it(self.R360))  # 调用内部方法  加()为直接调用
+        self.str_trans_to_md5_butt = Button(self.init_window_name, text="360", bg="lightblue", width=10,command=lambda: self.thread_it(self.R360))  # 调用内部方法  加()为直接调用
         self.str_trans_to_md5_butt.grid(row=5, column=11)
     @staticmethod
     def thread_it(func):
@@ -74,7 +74,7 @@ class MY_GUI_SET():
                 self.log_data_Text.insert(END, ci+"\n")
                 continue
             lb = re.findall(r"\"text-decoration\:none\;position\:relative\;\"\>(.*)?\/", a)
-            print(lb)
+
             strlb = ''.join(lb)
             z = "不在"
             for i in url:
@@ -111,7 +111,6 @@ class MY_GUI_SET():
 
             u='https://so.com/s?q={}&pn=1'.format(ci)      		 #360
             header = {'User-Agent': random.choice(uaList)}
-            print(header)
             time.sleep(0.3)
             a = requests.get(u,headers=header).content.decode('utf-8')
             if error in a:
@@ -119,7 +118,6 @@ class MY_GUI_SET():
                 continue
             lb=re.findall(r"\<cite\>(.*?)</cite\>",a) 			     #360
             strlb = ''.join(lb)
-            print(strlb)
             z = "不在"
             for i in url:
                 if i in strlb:
