@@ -26,5 +26,5 @@ if [[ $? > 0 ]];then
   echo " no pip3 install ipython "
   exit 0
 fi
-echo export PATH="$PATH:/usr/local/python/bin" > /etc/profile
+echo export PATH="$PATH:/usr/local/python/bin" >> /etc/profile
 source /etc/profile
