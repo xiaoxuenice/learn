@@ -65,7 +65,7 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
     - name: han2
       copy: content="{{ansible_all_ipv4_addresses}}" dest="/xue/ip.txt"
 ---------------------------templates------------
-# 3.拷贝文件的时候自动带入值
+# 拷贝文件的时候自动带入值
 vim /etc/ansible/hosts 
 [test]
 192.168.116.200 http_port=80 server_name=www.jd.com  #在主机定义变量
