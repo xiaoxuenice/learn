@@ -8,6 +8,7 @@ ansible -k密码，-i主机路径，-m执行模块名字，-u远程用户，-a�
 ---------------------------------------
 ansible test -m ping
 ansible test -m shell -a "chdir=/xue/ sed -i 's/l/b/g' a.txt " 		#切换到/xue执行sed
+ansible test -a "/bin/bash -c 'cp /test/*.txt /test/tttt/'"		#需要正则表达式加/bin/bash
 ansible test -m shell -a "removes=/xue/b.txt  ls"					#如果b.txt存在执行ls
 ansible test -m copy -a 'src=/hello dest=/xue/hello backup=yes'		#copy文件，有源文件自动备份
 ansible test -m copy -a 'content="okay" dest=/xue/test.txt mode=666'#写入文件
