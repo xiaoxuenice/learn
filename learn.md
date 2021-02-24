@@ -10,7 +10,7 @@ sed -i  '27i max_connections=10000' /etc/mysql/my.cnf             #最大连接�
 show variables like "%max_connections%";			  #查看最大连接数
 set global max_connections=10000;				  #设置临时最大连接数
 mysql_ssl_rsa_setup 
-create user 'zhangsan'@'%' identified by 'Pwd@123456' require ssl;
+create user zhangsan identified by 'Pwd@123456' require ssl;
 alter user root require ssl;
 grant all privileges on *.* to 'root'@'%' with grant option ;
 flush privileges;

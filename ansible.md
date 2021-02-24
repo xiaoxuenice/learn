@@ -1,3 +1,4 @@
+#!/bin/bash
 yum install python-pip && pip install ansible && touch /etc/ansible/hosts && touch /etc/ansible.cfg
 ---------------------------------------
 cat /etc/ansible/hosts
