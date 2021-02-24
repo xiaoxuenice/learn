@@ -62,6 +62,11 @@ docker export [容器 id] > [nginx.tar]			容器快照导出为tar文件
 cat nginx.tar | docker import - nginx:latest		容器快照/模板导入为镜像(need start container)
 find / -name [container id]  vim hostconfig.json  vim config.v2.json		修改/添加容器端口
 docker run --privileged -dti --name test1  centos /usr/sbin/init			ssh
+docker run -dit --link nginx01:nginxxx --name nginx02 nginx			容器ping提供host指定
+---------docker 挂载目录--------------------------------------
+docker volume create my-vol				创建挂载容器卷
+docker run -dit --name t1 --mount  source=my-vol,target=/test nginx		绑定挂载容器卷（目录)
+docker run -dit --name t1 --mount type=bind,source=/test/,target=/test centos	二进制挂载目录
 
 --------docker network -----------------------------------------
 docker network create --driver  bridge networ-xue			bridge网络==默认桥接网络
