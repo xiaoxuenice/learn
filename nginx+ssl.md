@@ -1,3 +1,4 @@
+#!/bin/shell
 server {
 	listen 80;
         listen 443 ssl;
