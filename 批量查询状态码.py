@@ -17,7 +17,7 @@ class MY_GUI_SET():
         # 标签
         self.init_data_label = Label(self.init_window_name, text="输入域名")
         self.init_data_label.grid(row=0, column=0)
-        self.name_data_label = Label(self.init_window_name, text="执行结果")
+        self.name_data_label = Label(self.init_window_name, text="主机ip\t\t       状态码\t域名")
         self.name_data_label.grid(row=0, column=14)
         #  滚动条
         self.scroll1 = Scrollbar()
@@ -56,11 +56,14 @@ class MY_GUI_SET():
         for i in a:
             i = i.strip()
             try:
-                ztm=requests.get("http://" + str(i.strip()), headers=headers).status_code
-                strr=i+"     \t"+str(ztm)+"\n"
+                aa=requests.get("http://" + str(i.strip()), headers=headers,stream=True)
+                ztm=aa.status_code
+                ipdz=aa.raw._connection.sock.getpeername()[0]
+                strr=str(ipdz)+"     \t"+str(ztm)+"     \t"+i+"\n"
 
                 self.name_data_Text.insert(END,strr,"tag2")
             except Exception as f:
+                print(f)
                 strr = i + "     \t" + "再测一次\n"
                 self.name_data_Text.insert(END,strr, "tag1")
 
