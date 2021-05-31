@@ -1,4 +1,4 @@
-#-*- mode=python ending:utf-8 -*-
+#!/bin/bash
 #############-----------------         随机验证码           ---------##############################
 import random
 def get_code(xx):
