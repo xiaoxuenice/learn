@@ -2,7 +2,7 @@
 cat >> /etc/init.d/rsync << EOF
 #!/bin/bash
 # chkconfig: 345 85 15
-case $1 in
+case \$1 in
 start)
 sh /test/rsync-inotify.sh
 ;;
@@ -25,3 +25,4 @@ EOF
 chmod +x /etc/init.d/rsync
 chkconfig --add rsync
 chkconfig rsync on
+systemctl daemon-reload
