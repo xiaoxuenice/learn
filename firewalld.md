@@ -1,3 +1,4 @@
+#!/bin/bash
 --permanent 								# 永久开放
 --timeout=60 								# 时间开放
 --zone=									# 设置的域noaddthen默认
