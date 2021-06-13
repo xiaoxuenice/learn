@@ -141,9 +141,9 @@ show variables like '%ssl%';   #查看是否开启ssl连接
 alter user 'root'@'%' require x509;         #证书(pymysql不能用)
 mysql -uroot -pPwd@123456 -h 192.168.116.200 --ssl-cert=/var/lib/mysql/client-cert.pem --ssl-key=/var/lib/mysql/client-key.pem --ssl-ca=/var/lib/mysql/ca.pem
 ###############-----------------                ssl+pymysql                 -------------------------
-db = pymysql.connect(host="192.168.116.200",user="root",passwd="Pwd@123456",database="python",ssl={"ssl":''}})
+db = pymysql.connect(host="192.168.116.200",user="root",passwd="Pwd@123456",database="python",ssl={"ssl":''})
 a= db.cursor()
-a.execute('insert into  user(ip,time) values("123","80:02"')) #创建写入数据
+a.execute('insert into  user(ip,time) values("123","80:02")') #创建写入数据
 db.commit()
 a.execute('select time  from {} where ip="{}";'.format(abrr,who))           #查询读取数据
 print(a.fetchall())
