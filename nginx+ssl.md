@@ -2,10 +2,18 @@
 server {
 	listen 80;
         listen 443 ssl;
+        listen 888 ssl;
         server_name www.aaaa.net aaaa.net wap.aaaa.net m.aaaa.net agent.aaaa.net;
 #limit_conn  one  100;
 #limit_conn perserver 1000;
 #limit_req   zone=allips  burst=5  nodelay;
+        if ($scheme = http ) {
+        return 301 https://$host$request_uri;
+        }
+        if ($server_port = 443 ){
+        rewrite ^/(.*) https://$host:888$1 break;
+        }
+
         
 	ssl_certificate_key STAR.aaaa.net.key;
         ssl_certificate STAR.aaaa.net.crt;
