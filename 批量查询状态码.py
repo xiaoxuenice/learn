@@ -1,5 +1,5 @@
 from tkinter import *
-from selenium import  webdriver
+from socket import gethostbyname
 import time,requests,threading
 LOG_LINE_NUM = 0
 class MY_GUI_SET():
@@ -7,6 +7,7 @@ class MY_GUI_SET():
 
     def __init__(self, init_window_name):
         self.init_window_name = init_window_name
+        self.ipdz=''
 
     def set_init_window(self):
         self.init_window_name.title("不要加 http://     红色和4开头 再测试一次或者打开浏览器测试")
@@ -54,17 +55,18 @@ class MY_GUI_SET():
             "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
             "accept": "text/plain, */*; q=0.01"}
         for i in a:
+            self.ipdz=''
             i = i.strip()
             try:
-                aa=requests.get("http://" + str(i.strip()), headers=headers,stream=True)
-                ztm=aa.status_code
-                ipdz=aa.raw._connection.sock.getpeername()[0]
-                strr=str(ipdz)+"     \t"+str(ztm)+"     \t"+i+"\n"
+                self.ipdz = gethostbyname(i)
+                ztm=requests.get("http://" + str(i), headers=headers,stream=True).status_code
 
+                strr=str(self.ipdz)+"     \t"+str(ztm)+"     \t"+i+"\n"
                 self.name_data_Text.insert(END,strr,"tag2")
             except Exception as f:
                 print(f)
-                strr = i + "     \t" + "再测一次\n"
+                print(self.ipdz)
+                strr = i +"     \t"+ str(self.ipdz)+"     \n" +str(f)+"\n"
                 self.name_data_Text.insert(END,strr, "tag1")
 
             time.sleep(0.5)
