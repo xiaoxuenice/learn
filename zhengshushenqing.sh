@@ -10,7 +10,7 @@ for i in `cat yuming.txt`;do
    /root/.acme.sh/acme.sh --issue --force -d ${i}  -d www.${i}  --webroot /usr/share/nginx/html/${i}
    if [ $? -eq 0 ];then
    \cp  /root/.acme.sh/${i}/${i}.key /usr/local/nginx/conf/${i}.key
-   \cp  /root/.acme.sh/${i}/${i}.cer /usr/local/nginx/conf/${i}.crt
+   \cp  /root/.acme.sh/${i}/fullchain.cer /usr/local/nginx/conf/${i}.crt
      echo -e  "\033[32m ${i}  更新成功 \033[0m"
    else
       echo -e "\033[31m ${i}  域名证书更新未成功 \033[0m"
