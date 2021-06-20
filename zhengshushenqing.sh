@@ -4,10 +4,12 @@ echo "更新yuming.txt里面的证书STARTING····"
 echo "======================================="
 echo "正在改变配置文件停止强制添加端口"
 echo "======================================="
+grep -r rewrite /usr/local/nginx/dh/
 grep -rl rewrite /usr/local/nginx/dh/ |xargs sed -i  's/rewrite/#rewrite/g'
+grep -r rewrite /usr/local/nginx/dh/
 nginx -t ;if [ $? -eq 0 ] ;then nginx -s reload;fi
-for i in `cat yuming.txt`;do
-   /root/.acme.sh/acme.sh --issue --force -d ${i}  -d www.${i}  --webroot /usr/share/nginx/html/${i}
+for i in `cat /zhengshu/yuming.txt`;do
+   /root/.acme.sh/acme.sh --issue --force -d ${i}  -d www.${i} --webroot /usr/share/nginx/html/${i}
    if [ $? -eq 0 ];then
    \cp  /root/.acme.sh/${i}/${i}.key /usr/local/nginx/conf/${i}.key
    \cp  /root/.acme.sh/${i}/fullchain.cer /usr/local/nginx/conf/${i}.crt
@@ -19,10 +21,12 @@ done
 echo "==========================="
 echo "正在恢复配置文件强制添加端口"
 echo "==========================="
+grep -r rewrite /usr/local/nginx/dh/
 grep -rl rewrite /usr/local/nginx/dh/ |xargs sed -i  's/#rewrite/rewrite/g'
+grep -r rewrite /usr/local/nginx/dh/
 echo "==========================="
 echo "重新加载 nginx "
 echo "==========================="
 nginx -t ;if [ $? -eq 0 ] ;then nginx -s reload;fi
-echo 'OK'
+if [ $? -eq 0 ] ;then echo 'OK' ;fi
 echo "==========================="
