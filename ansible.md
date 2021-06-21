@@ -58,8 +58,10 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
    - name: 带入值
      shell: echo "{{ shell_status.stdout }}" >> /a.txt  #tag1 获取变量字符串方式
    - name: debug                                    #tag1 debug调试模块
-     debug:
-        msg: "{{ shell_status['stdout_lines'] }}"   #tag1 变量以行的方式输出shell信息 
+     debug:                                         #tag1 变量以行的方式输出shell信息   
+        var: shell_status.stdout_lines              #区别 简单
+        msg: '{{ shell_status.stdout_lines }}'      #区别 可以加字符串 格式“‘{{}}’ aaaaa”
+
  ---------------------------------------------------------------------------------------------
    - name: diedai                                   #迭代item里面的内容
      copy: src=/xue/{{ item }} dest=/xue/xue/
