@@ -45,11 +45,22 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
      when: 											#判断当下面符合执行任务
        - ansible_distribution == "CentOS"
        - ansible_distribution_major_version == "7"
-       
+   
    - name:  stop_firewalld
      service: name=firewalld state=stopped
      notify:                                        #调用han2
        - han2
+-----------------------------------------------------------------------------------------------       
+   - name: 执行证书更新       
+     shell: sh /zhengshu/zhengshushenqing.sh
+     register: shell_status                        #tag1 注册变量
+
+   - name: 带入值
+     shell: echo "{{ shell_status.stdout }}" >> /a.txt  #tag1 获取变量字符串方式
+   - name: debug                                    #tag1 debug调试模块
+     debug:
+        msg: "{{ shell_status['stdout_lines'] }}"   #tag1 变量以行的方式输出shell信息 
+ ---------------------------------------------------------------------------------------------
    - name: diedai                                   #迭代item里面的内容
      copy: src=/xue/{{ item }} dest=/xue/xue/
      with_items:
@@ -59,7 +70,7 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
      copy: src=/xue/{{ item.name }} dest=/xue/xue/{{ item.arg }}
      with_items:
        - { name='a',arg="test1"}
-       - { name='b',arg="test2"}
+       - { name='b',arg="test2"
   handlers:            #搭配notify被调用
     - name: han1
       shell:  echo {{var1}} >> /xue/a.txt && sed -i 's/1/2/g' /xue/a.txt
