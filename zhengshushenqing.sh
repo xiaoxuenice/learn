@@ -22,7 +22,7 @@ echo "==========================="
 echo "正在恢复配置文件强制添加端口"
 echo "==========================="
 grep -r rewrite /usr/local/nginx/dh/
-grep -rl rewrite /usr/local/nginx/dh/ |xargs sed -i  's/#rewrite/rewrite/g'
+grep -rl rewrite /usr/local/nginx/dh/ |xargs sed -i  's/#*rewrite/rewrite/g'
 grep -r rewrite /usr/local/nginx/dh/
 echo "==========================="
 echo "重新加载 nginx "
