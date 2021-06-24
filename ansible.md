@@ -74,6 +74,12 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
        - { name='a',arg="test1"}
        - { name='b',arg="test2"
   handlers:            #搭配notify被调用
+- name : 同步文件
+  synchronize :
+    src  : /software
+    dest : /
+    delete : yes
+    #rsync_timeout : 10
     - name: han1
       shell:  echo {{var1}} >> /xue/a.txt && sed -i 's/1/2/g' /xue/a.txt
     - name: han2
