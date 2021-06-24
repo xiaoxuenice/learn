@@ -1,5 +1,6 @@
 ######## 	grep
--r  递归查找
+grep -r aaa 递归查找包含aaa
+grep -rl aaa 递归查找包含aaa的文件
 -i  忽略大小写
 -e  正则
 -o  只显示匹配的部分
@@ -28,4 +29,8 @@ awk 'NR==2''{print $NF}' a.txt
 sort -t= -k2n a.txt
 以=分隔符截取，按照第二列排序。
 
+sed
+
+sed   '/aaa/,+5 s/2020/9999/g' a.txt
+更改匹配到aaa的内容以下5行的2020改为9999
 
