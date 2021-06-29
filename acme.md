@@ -5,4 +5,5 @@ acme.sh --issue -d taobao.com -d www.taobao.com --webroot /usr/share/nginx/html/
 ln -s /root/.acme.sh/taobao.com/taobao.com.cer /usr/local/nginx/conf/
 ln -s /root/.acme.sh/taobao.com/taobao.com.key /usr/local/nginx/conf/
 #强制更新
-acme.sh --renew -d example.com --force 
+acme.sh --renew -d example.com -d www.example --force 
+
