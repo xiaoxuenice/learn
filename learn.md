@@ -1,4 +1,5 @@
-#!/bin/bash
+#!
+bin/bash
 -------------图形-----------
 yum groupinstall "X Window System"
 yum groupinstall "GNOME Desktop"
@@ -27,6 +28,11 @@ yum install -y yum-utils  device-mapper-persistent-data  lvm2
 yum-config-manager --add-repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo 
 yum -y install docker-ce --nobest
+
+tab 补齐命令
+yum install -y bash-completion
+source /usr/share/bash-completion/completions/docker
+source /usr/share/bash-completion/bash_completion
 
 -------安装 jenkins---------------------------------------------------------
  wget http://mirrors.jenkins-ci.org/war/latest/jenkins.war
