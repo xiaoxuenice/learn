@@ -1,3 +1,4 @@
+#!/bin/bash
 pip install python-telegram-bot<br>
 关注@BotFather用户<br>
 /newbot    		#创建<br>
