@@ -102,4 +102,25 @@ cat test.conf
 -----------
 cat nginx.conf
 80  www.jd.com
----------------------------yaml------------
+---------------------------yaml-------
+#执行的shell脚本，将shell执行的具体内容显示出来
+---
+- hosts: xg
+  remote_user: root
+  tasks:
+          - name: 检查 nginx -t
+            shell: '/usr/local/nginx/sbin/nginx -t && /usr/local/nginx/sbin/nginx -s reload'
+            register: nginx_status     #注册变量
+          - debug:
+               msg: "{{ nginx_status['stderr_lines'] }}"
+          - name: 查看需要更新的证书的域名
+            shell: 'cat /zhengshu/yuming.txt'
+            register: cat_status
+          - debug:
+              var: cat_status.stdout_lines
+          - name: 执行证书更新
+            shell: sh /zhengshu/zhengshushenqing.sh
+            register: shell_status      #注册变量
+          - debug:
+              var: shell_status.stdout_lines
+
