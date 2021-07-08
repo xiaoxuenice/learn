@@ -23,6 +23,7 @@ ansible test -m cron -a 'name="bp" hour=*/1 job="/usr/bin/cp a.txt a.bak &> /dev
 ansible test -m yum -a 'name=httpd state=present' 					#latest 安装,absent 卸载
 ansible test -m service -a 'name=nginx state=started enabled=true'	#enabled开机启动started，stopped，restarted，reloaded
 ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚本
+ansible all -m synchronize -a 'src=/test/a/ dest=/test/b/ delete=yes'    #rsync
 ---------------------------yaml------------
     # ansible-playbook a.yml --syntax-check    #检查yaml文件的语法是否正确
     # ansible-playbook a.yml --list-task       #检查tasks任务
@@ -35,7 +36,7 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
   vars:
     - var1: var111
   tasks:
-   - name:  start_firewalld
+   - name:  start-firewalld
      tags:                                          # 只执行这个标签上面的任务
       - only                                        # ansible-playbook test.yml --tags="only" 
      shell: systemctl start firewalld
@@ -46,7 +47,7 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
        - ansible_distribution == "CentOS"
        - ansible_distribution_major_version == "7"
    
-   - name:  stop_firewalld
+   - name:  stop-firewalld
      service: name=firewalld state=stopped
      notify:                                        #调用han2
        - han2
@@ -80,9 +81,9 @@ ansible test -m script -a "/tmp/kel.sh >/tmp/kelkel.log"            #执行脚�
     dest : /
     delete : yes
     #rsync_timeout : 10
-    - name: han1
+- name: han1
       shell:  echo {{var1}} >> /xue/a.txt && sed -i 's/1/2/g' /xue/a.txt
-    - name: han2
+- name: han2
       copy: content="{{ansible_all_ipv4_addresses}}" dest="/xue/ip.txt"
 ---------------------------templates------------
 # 拷贝文件的时候自动带入值
