@@ -1,5 +1,4 @@
-#!
-bin/bash
+#!bin/bash
 -------------图形-----------
 yum groupinstall "X Window System"
 yum groupinstall "GNOME Desktop"
