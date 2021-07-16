@@ -1,3 +1,4 @@
+#!/bin/bash
 ######## 	grep
 grep -r aaa 递归查找包含aaa
 grep -rl aaa 递归查找包含aaa的文件
